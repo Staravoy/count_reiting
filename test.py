@@ -1,39 +1,32 @@
-import tkinter as tk
-from tkinter import filedialog
+import openpyxl
 
-# Функція для обробки натискання кнопки "Вибрати документ Excel для аналізу"
-def select_excel():
-    file_path = filedialog.askopenfilename(filetypes=[("Excel Files", "*.xlsx")])
-    # Додайте ваш код для аналізу документу Excel
+file = 'rozstanovka.xlsx'
+wb = openpyxl.load_workbook(file, data_only=True)
+all_sheets = wb.sheetnames
+name_sheets_for_table = []
+for x in all_sheets:
+    name_sheets_for_table.append(x[:-5])
+name_sheets_for_table = [' '] + name_sheets_for_table
 
-# Функція для обробки натискання кнопки "Закрити програму"
-def close_program():
-    root.destroy()
+new_table = openpyxl.Workbook()
+new_table.save('new_table.xlsx')
 
-# Створення вікна
-root = tk.Tk()
-root.title("ПідраХуй")
-root.geometry("400x400") # Розмір вікна
+def fill_table(num_row, my_list):
+    # Створюємо новий документ Excel
+    wb = openpyxl.load_workbook('new_table.xlsx')
+    # Вибираємо активний аркуш
+    sheet = wb.active
+    col = 1
+    for x in my_list:
+        sheet.cell(row=num_row, column=col, value=x)
+        col += 1
+    wb.save('new_table.xlsx')
 
-# Header
-header_label = tk.Label(root, text="ПідраХуй", font=("Helvetica", 24, "bold"), fg="yellow")
-header_label.pack(pady=20)
+fill_table(1, name_sheets_for_table)
 
-# Body
-rules_label = tk.Label(root, text="Правила користування програмою:", font=("Helvetica", 14))
-rules_label.pack()
+second_row = ['value1', 'value2', 'value3', 'value4', 'value5', 'value6', 'value7']
 
-rules_list = tk.Label(root, text="- Виберіть документ Excel для аналізу\n- Закрийте програму", font=("Helvetica", 12))
-rules_list.pack()
+therd_row = ['value1', 'value2', 'value3', 'value4', 'value5', 'value6', 'value7']
 
-select_button = tk.Button(root, text="Вибрати документ Excel для аналізу", command=select_excel)
-select_button.pack(pady=10)
-
-close_button = tk.Button(root, text="Закрити програму", command=close_program)
-close_button.pack()
-
-# Footer
-footer_label = tk.Label(root, text="Company: Staravoy", font=("Helvetica", 10))
-footer_label.pack(pady=20)
-
-root.mainloop()
+fill_table(2, second_row)
+fill_table(3, therd_row)

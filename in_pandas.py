@@ -1,8 +1,6 @@
 import pandas as pd
+from generate_name_colum import generate_name_column
 
-df = pd.read_excel('rozstanovka.xlsx', sheet_name='01.07.2023')
-
-valueB7 = df.iloc[2, 5]
-
-
-print(valueB7)
+file_path = 'rozstanovka.xlsx'
+df = pd.ExcelFile(file_path)
+data = df.parse('01.07.2023')

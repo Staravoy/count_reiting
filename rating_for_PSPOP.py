@@ -1,3 +1,9 @@
-import openpyxl
+import pandas as pd
+from generate_name_colum import generate_name_column
+import tkinter as tk
+from tkinter import filedialog
 
-reiting_file = openpyxl.load_workbook('reiting.xlsx')
+path_to_file = 'rozstanovka.xlsx'
+
+table = pd.DataFrame()
+
