@@ -48,22 +48,24 @@ def create_new_excel_table():
     return name_new_table
 
 
-def fill_table(num_row, my_list):
+def fill_table(name_file, num_row, my_list):
     # Відкриваємо новий документ Excel
-    wb = openpyxl.load_workbook('new_table.xlsx')
+    name = name_file
+    wb = openpyxl.load_workbook(name)
     # Вибираємо активний аркуш
     sheet = wb.active
     col = 1
     for x in my_list:
         sheet.cell(row=num_row, column=col, value=x)
         col += 1
-    wb.save('new_table.xlsx')
+    wb.save(name)
 
 
 # отримання даних необхідних для роботи
 start = get_star_and_end_row("Введіть номер рядку ПЕРШОГО підрозділу в списку:")
 end = get_star_and_end_row("Введіть номер рядку ОСТАННЬОГО підрозділу в списку:")
 work_column = get_letter_work_column("Введіть літеру або літери, колонки яку треба опрацювати:")
+# отримуємо назву нового документу та створюємо його
 name_new_table = create_new_excel_table()
 print("Збір даних розпочато...")
 
@@ -71,8 +73,14 @@ print("Збір даних розпочато...")
 name_forces = get_all_names_force(start, end)
 # завантажили робочу книгу з усіма листами
 file, sheets = load_file_and_all_sheets()
+# створюємо шапку таблиці з обрізаних назв листів
+list_sheet_name = [" "]
+for sheet in sheets:
+    list_sheet_name.append(sheet[:-5])
+fill_table(name_new_table, 1, list_sheet_name)
 
 
+num_row = 2
 for name in range(0, len(name_forces)):
     list_for_new_table = []
     list_for_new_table.append(name_forces[name])
@@ -87,5 +95,7 @@ for name in range(0, len(name_forces)):
         if not cell:
             continue
         list_for_new_table.append(cell)
-    print(list_for_new_table)
+    fill_table(name_new_table, num_row, list_for_new_table)
+    num_row += 1
+print("Збір даних завершено!")
 
