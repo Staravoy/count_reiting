@@ -42,7 +42,7 @@ work_num_column = letter_to_num_column[work_num_column]
 value = []
 for one_sheet in all_sheets:
     sheet = wb[one_sheet]
-    # шукаємо номер рядку підрозділу на кожнму аркуші
+    # шукаємо номер рядку підрозділу на кожному аркуші
     for i in range(start_row, end_row + 1):
         cell_value = sheet.cell(row=i, column=1).value
         if cell_value == names_forces[-1]:
