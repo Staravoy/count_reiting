@@ -1,7 +1,16 @@
+
+import os
 import openpyxl
+import sys
 from generate_name_colum import generate_name_column
 import tkinter as tk
 from tkinter import filedialog
+
+def get_abs_path(file_name):
+    # Отримати абсолютний шлях до файлу, де знаходиться виконуваний файл
+    current_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    abs_path = os.path.join(current_dir, file_name)
+    return abs_path
 
 
 def dialog_window():
@@ -14,7 +23,7 @@ def dialog_window():
 
 def load_file_and_all_sheets():
     file_path = dialog_window()
-    wb = openpyxl.load_workbook(file_path, data_only=True)
+    wb = openpyxl.load_workbook(get_abs_path(file_path), data_only=True)
     list_all_sheets = wb.sheetnames
     wb.close()
     return wb, list_all_sheets
@@ -55,7 +64,7 @@ def create_new_excel_table():
     name = input("Введіть назву таблиці яка утвориться після збору інформації: ")
     new_table = openpyxl.Workbook()
     name_new_table = f'{name}.xlsx'
-    new_table.save(name_new_table)
+    new_table.save(get_abs_path(name_new_table))
     new_table.close()
     return name_new_table
 
@@ -63,14 +72,14 @@ def create_new_excel_table():
 def fill_table(name_file, num_row, my_list):
     # Відкриваємо новий документ Excel
     name = name_file
-    wb = openpyxl.load_workbook(name)
+    wb = openpyxl.load_workbook(get_abs_path(name))
     # Вибираємо активний аркуш
     sheet = wb.active
     col = 1
     for x in my_list:
         sheet.cell(row=num_row, column=col, value=x)
         col += 1
-    wb.save(name)
+    wb.save(get_abs_path(name))
     wb.close()
 
 while True:
@@ -114,8 +123,10 @@ while True:
             if not cell:
                 continue
             list_for_new_table.append(cell)
+
         fill_table(name_new_table, num_row, list_for_new_table)
         num_row += 1
+
     print("Збір даних завершено!")
     question = input("Чи бажаєте продовжити роботу? (так/ні)")
     if question == 'ні':
